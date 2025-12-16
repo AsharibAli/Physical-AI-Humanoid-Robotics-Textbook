@@ -413,11 +413,3 @@ This project follows Spec-Driven Development (SDD) via Spec-Kit Plus:
 2. Architecture planning precedes implementation (`/sp.plan`)
 3. Tasks are generated from specs (`/sp.tasks`)
 4. Implementation follows task order (`/sp.implement`)
-
-## License
-
-[Add license information]
-
-## Contact
-
-[Add contact information]
