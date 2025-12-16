@@ -1,0 +1,57 @@
+[project]
+name = "physical-ai-textbook-backend"
+version = "1.0.0"
+description = "RAG-powered backend for Physical AI & Humanoid Robotics textbook"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    {name = "Physical AI Textbook Team"}
+]
+dependencies = [
+    "aiofiles>=25.1.0",
+    "fastapi>=0.109.0",
+    "httpx>=0.28.1",
+    "markdown>=3.10",
+    "openai>=1.12.0",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.12.0",
+    "python-dotenv>=1.2.1",
+    "python-frontmatter>=1.1.0",
+    "python-multipart>=0.0.20",
+    "qdrant-client>=1.7.0",
+    "slowapi>=0.1.9",
+    "uvicorn[standard]>=0.27.0",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.12.0",
+    "flake8>=7.3.0",
+    "ipython>=9.8.0",
+    "isort>=7.0.0",
+    "mypy>=1.19.1",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.0.0",
+]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
