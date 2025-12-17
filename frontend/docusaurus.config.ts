@@ -18,7 +18,7 @@ const config: Config = {
   projectName: 'Physical-AI-Humanoid-Robotics-Textbook',
 
   customFields: {
-    backendApiUrl: process.env.BACKEND_API_URL || 'https://your-backend.railway.app',
+    backendApiUrl: process.env.BACKEND_API_URL || 'https://physical-ai-humanoid-robotics-textbook-production-b19d.up.railway.app',
   },
 
   onBrokenLinks: 'throw',
