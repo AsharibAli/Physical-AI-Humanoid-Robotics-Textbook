@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -11,6 +12,8 @@ interface SimpleChatInterfaceProps {
 }
 
 export const SimpleChatInterface: React.FC<SimpleChatInterfaceProps> = ({ isDarkMode }) => {
+  const { siteConfig } = useDocusaurusContext();
+  const backendApiUrl = siteConfig.customFields?.backendApiUrl as string || 'http://localhost:8000';
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -51,7 +54,7 @@ export const SimpleChatInterface: React.FC<SimpleChatInterfaceProps> = ({ isDark
 
     try {
       // Call backend query endpoint
-      const response = await fetch('http://localhost:8000/api/v1/query', {
+      const response = await fetch(`${backendApiUrl}/api/v1/query`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
