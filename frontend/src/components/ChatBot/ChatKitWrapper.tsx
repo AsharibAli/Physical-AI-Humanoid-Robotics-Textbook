@@ -4,6 +4,7 @@ import { SimpleChatInterface } from './SimpleChatInterface';
 export const ChatKitWrapper: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [clearTrigger, setClearTrigger] = useState(0);
 
   // Detect theme changes
   useEffect(() => {
@@ -23,6 +24,15 @@ export const ChatKitWrapper: React.FC = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  const handleClearHistory = () => {
+    if (confirm('Are you sure you want to clear the chat history?')) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('chatMessages');
+      }
+      setClearTrigger(prev => prev + 1);
+    }
+  };
 
   // Theme-aware colors
   const bgColor = isDarkMode ? '#ffffff' : '#000000';
@@ -97,29 +107,52 @@ export const ChatKitWrapper: React.FC = () => {
         borderBottom: `2px solid ${bgColor}`
       }}>
         <span style={{ fontWeight: 600 }}>AI Assistant</span>
-        <button
-          onClick={() => setIsCollapsed(true)}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: textColor,
-            fontSize: '20px',
-            cursor: 'pointer',
-            padding: '0 8px',
-            transition: 'opacity 0.2s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = '0.7';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = '1';
-          }}
-          title="Minimize"
-        >
-          ✕
-        </button>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button
+            onClick={handleClearHistory}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: textColor,
+              fontSize: '18px',
+              cursor: 'pointer',
+              padding: '0 8px',
+              transition: 'opacity 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '0.7';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '1';
+            }}
+            title="Clear chat history"
+          >
+            🗑️
+          </button>
+          <button
+            onClick={() => setIsCollapsed(true)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: textColor,
+              fontSize: '20px',
+              cursor: 'pointer',
+              padding: '0 8px',
+              transition: 'opacity 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '0.7';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '1';
+            }}
+            title="Minimize"
+          >
+            ✕
+          </button>
+        </div>
       </div>
-      <SimpleChatInterface isDarkMode={isDarkMode} />
+      <SimpleChatInterface isDarkMode={isDarkMode} key={clearTrigger} />
     </div>
   );
 };

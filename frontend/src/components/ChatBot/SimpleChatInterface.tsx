@@ -9,18 +9,39 @@ interface Message {
 
 interface SimpleChatInterfaceProps {
   isDarkMode: boolean;
+  onClearHistory?: () => void;
 }
 
-export const SimpleChatInterface: React.FC<SimpleChatInterfaceProps> = ({ isDarkMode }) => {
+export const SimpleChatInterface: React.FC<SimpleChatInterfaceProps> = ({ isDarkMode, onClearHistory }) => {
   const { siteConfig } = useDocusaurusContext();
   const backendApiUrl = siteConfig.customFields?.backendApiUrl as string || 'http://localhost:8000';
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: 'assistant',
-      content: 'Hello! I\'m your AI assistant for the Physical AI & Humanoid Robotics textbook. Ask me anything!',
-      timestamp: new Date()
+
+  // Load messages from localStorage on mount
+  const [messages, setMessages] = useState<Message[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('chatMessages');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          // Convert timestamp strings back to Date objects
+          return parsed.map((msg: any) => ({
+            ...msg,
+            timestamp: new Date(msg.timestamp)
+          }));
+        } catch (e) {
+          console.error('Error loading messages:', e);
+        }
+      }
     }
-  ]);
+    return [
+      {
+        role: 'assistant',
+        content: 'Hello! I\'m your AI assistant for the Physical AI & Humanoid Robotics textbook. Ask me anything!',
+        timestamp: new Date()
+      }
+    ];
+  });
+
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -30,6 +51,13 @@ export const SimpleChatInterface: React.FC<SimpleChatInterfaceProps> = ({ isDark
   const borderColor = isDarkMode ? '#404040' : '#d4d4d4';
   const userMsgBg = isDarkMode ? '#1a1a1a' : '#f5f5f5';
   const assistantMsgBg = isDarkMode ? '#0a0a0a' : '#ffffff';
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('chatMessages', JSON.stringify(messages));
+    }
+  }, [messages]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
