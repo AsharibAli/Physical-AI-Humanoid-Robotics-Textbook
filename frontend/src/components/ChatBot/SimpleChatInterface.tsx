@@ -14,7 +14,18 @@ interface SimpleChatInterfaceProps {
 
 export const SimpleChatInterface: React.FC<SimpleChatInterfaceProps> = ({ isDarkMode, onClearHistory }) => {
   const { siteConfig } = useDocusaurusContext();
-  const backendApiUrl = siteConfig.customFields?.backendApiUrl as string || 'http://localhost:8000';
+
+  // Determine backend URL based on environment
+  const getBackendUrl = () => {
+    // If running on localhost, use local backend
+    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+      return 'http://localhost:8000';
+    }
+    // Otherwise use configured backend URL
+    return siteConfig.customFields?.backendApiUrl as string || 'http://localhost:8000';
+  };
+
+  const backendApiUrl = getBackendUrl();
 
   // Load messages from localStorage on mount
   const [messages, setMessages] = useState<Message[]>(() => {
