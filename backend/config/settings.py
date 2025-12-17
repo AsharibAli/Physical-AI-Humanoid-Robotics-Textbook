@@ -4,6 +4,7 @@ Application settings and configuration.
 This module loads configuration from environment variables.
 """
 
+from pathlib import Path
 from typing import Optional
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -13,7 +14,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=str(Path(__file__).parent.parent / ".env"),
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
